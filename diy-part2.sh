@@ -31,7 +31,8 @@ sed -i "s/'UTC'/'CST-8'\n        set system.@system[-1].zonename='Asia\/Shanghai
 sed -i 's|pcdata(boardinfo.system or "?")|luci.sys.exec("uname -m") or "?"|g' feeds/luci/modules/luci-mod-admin-full/luasrc/view/admin_status/index.htm
 sed -i 's/or "1"%>/or "1"%> ( <%=luci.sys.exec("expr `cat \/sys\/class\/thermal\/thermal_zone0\/temp` \/ 1000") or "?"%> \&#8451; ) /g' feeds/luci/modules/luci-mod-admin-full/luasrc/view/admin_status/index.htm
 
-pushd package
+mkdir ./package/add
+pushd package/add
 # Add mentohust & luci-app-mentohust.
 git clone --depth=1 https://github.com/BoringCat/luci-app-mentohust
 git clone --depth=1 https://github.com/KyleRicardo/MentoHUST-OpenWrt-ipk
@@ -82,8 +83,8 @@ git clone --depth=1 https://github.com/tindy2013/openwrt-subconverter
 svn co https://github.com/project-openwrt/openwrt/trunk/package/ctcgfw/gotop
 
 # Add smartdns
-svn co https://github.com/pymumu/smartdns/trunk/package/openwrt ../smartdns
-svn co https://github.com/project-openwrt/openwrt/trunk/package/ntlf9t/luci-app-smartdns ../luci-app-smartdns
+svn co https://github.com/pymumu/smartdns/trunk/package/openwrt ./smartdns
+svn co https://github.com/project-openwrt/openwrt/trunk/package/ntlf9t/luci-app-smartdns
 
 # Add udptools
 git clone --depth=1 https://github.com/bao3/openwrt-udp2raw
