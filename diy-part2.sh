@@ -36,6 +36,9 @@ pushd package
 git clone --depth=1 https://github.com/BoringCat/luci-app-mentohust
 git clone --depth=1 https://github.com/KyleRicardo/MentoHUST-OpenWrt-ipk
 
+# Add luci-app-ustb
+git clone https://github.com/WROIATE/luci-app-ustb
+
 # Add ServerChan
 git clone --depth=1 https://github.com/tty228/luci-app-serverchan
 
