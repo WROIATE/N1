@@ -81,9 +81,9 @@ popd
 # Mod zzz-default-settings
 pushd package/lean/default-settings/files
 sed -i "/commit luci/i\uci set luci.main.mediaurlbase='/luci-static/argon'" zzz-default-settings
-sed -i "/uci commit system/a\uci set dhcp.@dnsmasq[0].filter_aaaa='1'" test.sh
-sed -i "/dhcp.@dnsmasq/a\uci commit dhcp" test.sh
-sed -i "/-j REDIRECT --to-ports 53/d" test.sh
-sed -i "/REDIRECT --to-ports 53/a\echo '# iptables -t nat -A PREROUTING -p udp --dport 53 -j REDIRECT --to-ports 53' >> /etc/firewall.user" test.sh
+sed -i "/uci commit system/a\uci set dhcp.@dnsmasq[0].filter_aaaa='1'" zzz-default-settings
+sed -i "/dhcp.@dnsmasq/a\uci commit dhcp" zzz-default-settings
+sed -i "/-j REDIRECT --to-ports 53/d" zzz-default-settings
+sed -i "/REDIRECT --to-ports 53/a\echo '# iptables -t nat -A PREROUTING -p udp --dport 53 -j REDIRECT --to-ports 53' >> /etc/firewall.user" zzz-default-settings
 popd
 
