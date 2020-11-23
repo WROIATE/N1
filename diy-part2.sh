@@ -17,15 +17,11 @@
 pushd package/lean
 rm -rf luci-theme-argon
 git clone -b 18.06 https://github.com/jerrykuku/luci-theme-argon luci-theme-argon
+git clone https://github.com/jerrykuku/luci-app-argon-config
 popd
 
 # 更改主题
 sed -i 's/luci-theme-bootstrap/luci-theme-argon/g' feeds/luci/collections/luci/Makefile
-
-# 更改时区
-sed -i "s/'UTC'/'CST-8'\n        set system.@system[-1].zonename='Asia\/Shanghai'/g" package/base-files/files/bin/config_generate
-
-# Add Project OpenWrt's autocore
 
 #修复核心及添加温度显示
 sed -i 's|pcdata(boardinfo.system or "?")|luci.sys.exec("uname -m") or "?"|g' feeds/luci/modules/luci-mod-admin-full/luasrc/view/admin_status/index.htm
@@ -33,9 +29,6 @@ sed -i 's/or "1"%>/or "1"%> ( <%=luci.sys.exec("expr `cat \/sys\/class\/thermal\
 
 mkdir ./package/self_add
 pushd package/self_add
-# Add mentohust & luci-app-mentohust.
-git clone --depth=1 https://github.com/BoringCat/luci-app-mentohust
-git clone --depth=1 https://github.com/KyleRicardo/MentoHUST-OpenWrt-ipk
 
 # Add luci-app-ustb
 git clone https://github.com/WROIATE/luci-app-ustb
@@ -58,11 +51,6 @@ git clone --depth=1 https://github.com/lisaac/luci-app-diskman
 # mkdir parted
 # cp luci-app-diskman/Parted.Makefile parted/Makefile
 
-# Add luci-app-dockerman
-rm -rf ../lean/luci-app-docker
-git clone --depth=1 https://github.com/KFERMercer/luci-app-dockerman
-git clone --depth=1 https://github.com/lisaac/luci-lib-docker
-
 # Add luci-app-gowebdav
 git clone --depth=1 https://github.com/project-openwrt/openwrt-gowebdav
 
@@ -83,13 +71,8 @@ git clone --depth=1 https://github.com/tindy2013/openwrt-subconverter
 svn co https://github.com/project-openwrt/openwrt/trunk/package/ctcgfw/gotop
 
 # Add smartdns
-svn co https://github.com/pymumu/smartdns/trunk/package/openwrt ./smartdns
-svn co https://github.com/project-openwrt/openwrt/trunk/package/ntlf9t/luci-app-smartdns
-
-# Add udptools
-# git clone --depth=1 https://github.com/bao3/openwrt-udp2raw
-# git clone --depth=1 https://github.com/bao3/openwrt-udpspeeder
-# git clone --depth=1 https://github.com/bao3/luci-udptools
+svn co https://github.com/kenzok8/openwrt-packages/trunk/smartdns
+svn co https://github.com/kenzok8/openwrt-packages/trunk/luci-app-smartdns
 
 # Add OpenAppFilter
 git clone --depth=1 https://github.com/destan19/OpenAppFilter
@@ -98,12 +81,9 @@ popd
 # Mod zzz-default-settings
 pushd package/lean/default-settings/files
 sed -i "/commit luci/i\uci set luci.main.mediaurlbase='/luci-static/argon'" zzz-default-settings
-sed -i '/http/d' zzz-default-settings
-sed -i '/exit/i\chmod +x /bin/ipv6-helper' zzz-default-settings
+sed -i "/uci commit system/a\uci set dhcp.@dnsmasq[0].filter_aaaa='1'" test.sh
+sed -i "/dhcp.@dnsmasq/a\uci commit dhcp" test.sh
+sed -i "/-j REDIRECT --to-ports 53/d" test.sh
+sed -i "/REDIRECT --to-ports 53/a\echo '# iptables -t nat -A PREROUTING -p udp --dport 53 -j REDIRECT --to-ports 53' >> /etc/firewall.user" test.sh
 popd
 
-# Add po2lmo
-git clone https://github.com/openwrt-dev/po2lmo.git
-pushd po2lmo
-make && sudo make install
-popd
