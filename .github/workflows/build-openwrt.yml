@@ -28,6 +28,8 @@ env:
   CONFIG_FILE: .config
   DIY_P1_SH: diy-part1.sh
   DIY_P2_SH: diy-part2.sh
+  PKG_SH: package.sh
+  ARM_IMG: Armbian_20.10_Aml-s9xxx_buster_5.4.77-flippy-49+o.img.xz
   UPLOAD_BIN_DIR: false
   UPLOAD_FIRMWARE: true
   UPLOAD_COWTRANSFER: false
@@ -37,7 +39,7 @@ env:
 
 jobs:
   build:
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-20.04
 
     steps:
     - name: Checkout
@@ -49,11 +51,13 @@ jobs:
       run: |
         sudo rm -rf /etc/apt/sources.list.d/* /usr/share/dotnet /usr/local/lib/android /opt/ghc
         sudo -E apt-get -qq update
-        sudo -E apt-get -qq install $(curl -fsSL git.io/depends-ubuntu-1804)
+        sudo -E apt-get -qq install $(curl -fsSL git.io/depends-ubuntu-2004)
         sudo -E apt-get -qq autoremove --purge
         sudo -E apt-get -qq clean
         sudo timedatectl set-timezone "$TZ"
         sudo mkdir -p /workdir
+        sudo mkdir -p /opt/openwrt
+        sudo mkdir -p /opt/imgs
         sudo chown $USER:$GROUPS /workdir
 
     - name: Clone source code
@@ -131,14 +135,31 @@ jobs:
         echo "FIRMWARE=$PWD" >> $GITHUB_ENV
         echo "::set-output name=status::success"
 
+    - name: Package N1
+      if: steps.compile.outputs.status == 'success'
+      run: |
+        sudo mkdir -p /opt/openwrt
+        sudo mkdir -p /opt/imgs
+        sudo mv $GITHUB_WORKSPACE/$PKG_SH /opt/openwrt
+        sudo mv $GITHUB_WORKSPACE/files /opt/openwrt
+        sudo cp ${{ env.FIRMWARE }}/*.default-rootfs.tar.gz /opt/openwrt
+        cd /opt/imgs
+        sudo wget -q https://github.com/WROIATE/N1/releases/download/work/Armbian_20.10_Aml-s9xxx_buster_5.4.77-flippy-49+o.img.xz
+        sudo xz -d ./$ARM_IMG
+        cd /opt/openwrt
+        sudo chmod +x ./package.sh
+        sudo ./package.sh
+        sudo cp /opt/openwrt/tmp/*.img ${{ env.FIRMWARE }}
+
     - name: Upload firmware directory
       uses: actions/upload-artifact@main
       if: steps.organize.outputs.status == 'success' && !cancelled()
       with:
-        name: OpenWrt_firmware${{ env.DEVICE_NAME }}${{ env.FILE_DATE }}
+        name: OpenWrt_N1_${{ env.FILE_DATE }}
         path: |
           ${{ env.FIRMWARE }}/*.default-rootfs.tar.gz
           ${{ env.FIRMWARE }}/*.buildinfo
+          ${{ env.FIRMWARE }}/N1*
 
     - name: Upload firmware to cowtransfer
       id: cowtransfer
