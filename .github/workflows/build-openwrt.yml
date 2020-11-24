@@ -56,8 +56,6 @@ jobs:
         sudo -E apt-get -qq clean
         sudo timedatectl set-timezone "$TZ"
         sudo mkdir -p /workdir
-        sudo mkdir -p /opt/openwrt
-        sudo mkdir -p /opt/imgs
         sudo chown $USER:$GROUPS /workdir
 
     - name: Clone source code
