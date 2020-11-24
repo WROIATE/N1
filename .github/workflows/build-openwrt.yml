@@ -30,7 +30,6 @@ env:
   DIY_P2_SH: diy-part2.sh
   FILES: files 
   PKG_SH: package.sh
-  ARM_IMG: Armbian_20.10_Aml-s9xxx_buster_5.4.77-flippy-49+o.img.xz
   UPLOAD_BIN_DIR: false
   UPLOAD_FIRMWARE: true
   UPLOAD_COWTRANSFER: false
@@ -135,7 +134,7 @@ jobs:
         echo "::set-output name=status::success"
 
     - name: Package N1
-      if: steps.compile.outputs.status == 'success'
+      if: steps.organize.outputs.status == 'success'
       run: |
         sudo mkdir -p /opt/openwrt
         sudo mkdir -p /opt/imgs
@@ -144,7 +143,7 @@ jobs:
         sudo cp ${{ env.FIRMWARE }}/*.default-rootfs.tar.gz /opt/openwrt
         cd /opt/imgs
         sudo wget -q https://github.com/WROIATE/N1/releases/download/work/Armbian_20.10_Aml-s9xxx_buster_5.4.77-flippy-49+o.img.xz
-        sudo xz -d ./$ARM_IMG
+        sudo xz -d Armbian_20.10_Aml-s9xxx_buster_5.4.77-flippy-49+o.img.xz
         cd /opt/openwrt
         sudo chmod +x ./package.sh
         sudo ./package.sh
