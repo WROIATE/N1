@@ -137,15 +137,15 @@ jobs:
       run: |
         sudo mkdir -p /opt/openwrt
         sudo mkdir -p /opt/imgs
-        sudo mv $GITHUB_WORKSPACE/$PKG_SH /opt/openwrt
-        sudo mv $GITHUB_WORKSPACE/files /opt/openwrt
+        sudo mv $GITHUB_WORKSPACE/flippy/$PKG_SH /opt/openwrt
+        sudo mv $GITHUB_WORKSPACE/flippy/files /opt/openwrt
         sudo cp ${{ env.FIRMWARE }}/*.default-rootfs.tar.gz /opt/openwrt
         cd /opt/imgs
         sudo wget -q https://github.com/WROIATE/N1/releases/download/work/Armbian_20.10_Aml-s9xxx_buster_5.4.77-flippy-49+o.img.xz
         sudo xz -d Armbian_20.10_Aml-s9xxx_buster_5.4.77-flippy-49+o.img.xz
         cd /opt/openwrt
-        sudo chmod +x ./package.sh
-        sudo ./package.sh
+        sudo chmod +x ./$PKG_SH
+        sudo ./$PKG_SH
         sudo cp /opt/openwrt/tmp/*.img ${{ env.FIRMWARE }}
 
     - name: Upload firmware directory
