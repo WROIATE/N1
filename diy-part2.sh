@@ -88,5 +88,6 @@ sed -i "/uci commit system/a\uci set dhcp.@dnsmasq[0].filter_aaaa='0'" zzz-defau
 sed -i "/dhcp.@dnsmasq/a\uci commit dhcp" zzz-default-settings
 sed -i "/-j REDIRECT --to-ports 53/d" zzz-default-settings
 sed -i "/REDIRECT --to-ports 53/a\echo '# iptables -t nat -A PREROUTING -p udp --dport 53 -j REDIRECT --to-ports 53' >> /etc/firewall.user" zzz-default-settings
+sed -i "/exit 0/i\echo 'performance' > /sys/devices/system/cpu/cpufreq/policy0/scaling_governor"
 popd
 
