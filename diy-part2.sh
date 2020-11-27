@@ -1,19 +1,3 @@
-#!/bin/bash
-#
-# Copyright (c) 2019-2020 P3TERX <https://p3terx.com>
-#
-# This is free software, licensed under the MIT License.
-# See /LICENSE for more information.
-#
-# https://github.com/P3TERX/Actions-OpenWrt
-# File name: diy-part2.sh
-# Description: OpenWrt DIY script part 2 (After Update feeds)
-#
-
-# Modify default IP
-#sed -i 's/192.168.1.1/192.168.50.5/g' package/base-files/files/bin/config_generate
-
-# 清除旧版argon主题并拉取最新版
 pushd package/lean
 rm -rf luci-theme-argon
 git clone -b 18.06 https://github.com/jerrykuku/luci-theme-argon luci-theme-argon
@@ -74,7 +58,8 @@ git clone --depth=1 https://github.com/tindy2013/openwrt-subconverter
 svn co https://github.com/project-openwrt/openwrt/trunk/package/ctcgfw/gotop
 
 # Add smartdns
-svn co https://github.com/kenzok8/openwrt-packages/trunk/smartdns
+svn co https://github.com/Lienol/openwrt-packages/trunk/smartdns
+sed -i "s/PKG_SOURCE_VERSION:.*/PKG_SOURCE_VERSION:=Release33/g" smartdns/Makefile
 svn co https://github.com/kenzok8/openwrt-packages/trunk/luci-app-smartdns
 
 # Add OpenAppFilter
@@ -88,6 +73,5 @@ sed -i "/uci commit system/a\uci set dhcp.@dnsmasq[0].filter_aaaa='0'" zzz-defau
 sed -i "/dhcp.@dnsmasq/a\uci commit dhcp" zzz-default-settings
 sed -i "/-j REDIRECT --to-ports 53/d" zzz-default-settings
 sed -i "/REDIRECT --to-ports 53/a\echo '# iptables -t nat -A PREROUTING -p udp --dport 53 -j REDIRECT --to-ports 53' >> /etc/firewall.user" zzz-default-settings
-sed -i "/exit 0/i\echo 'performance' > /sys/devices/system/cpu/cpufreq/policy0/scaling_governor"
+sed -i "/exit 0/i\echo 'echo \"performance\" > /sys/devices/system/cpu/cpufreq/policy0/scaling_governor' >> /etc/rc.loacl" zzz-default-settings
 popd
-
