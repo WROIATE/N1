@@ -36,6 +36,7 @@ git clone --depth=1 https://github.com/rufengsuixing/luci-app-onliner
 
 # Add luci-app-adguardhome
 svn co https://github.com/Lienol/openwrt/trunk/package/diy/luci-app-adguardhome
+sed -i "/.*noresolv=1/a\\\tuci set dhcp.@dnsmasq[0].cachesize=0" luci-app-adguardhome/root/etc/init.d/AdGuardHome
 svn co https://github.com/Lienol/openwrt/trunk/package/diy/adguardhome
 
 # Add luci-app-gowebdav
