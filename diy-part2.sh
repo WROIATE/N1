@@ -58,7 +58,7 @@ git clone --depth=1 https://github.com/tindy2013/openwrt-subconverter
 svn co https://github.com/project-openwrt/openwrt/trunk/package/ctcgfw/gotop
 
 # Add smartdns
-svn co https://github.com/Lienol/openwrt-packages/trunk/smartdns
+svn co https://github.com/Lienol/openwrt-packages/trunk/net/smartdns
 sed -i "s/PKG_SOURCE_VERSION:.*/PKG_SOURCE_VERSION:=Release33/g" smartdns/Makefile
 svn co https://github.com/kenzok8/openwrt-packages/trunk/luci-app-smartdns
 
