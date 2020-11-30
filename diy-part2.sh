@@ -22,6 +22,15 @@ rm -rf package/feeds/packages/smartdns
 mkdir ./package/self_add
 pushd package/self_add
 
+# Add Lienol access cnotrol
+svn co https://github.com/Lienol/openwrt-package/trunk/others/luci-app-control-timewol
+svn co https://github.com/Lienol/openwrt-package/trunk/others/luci-app-control-webrestriction
+svn co https://github.com/Lienol/openwrt-package/trunk/others/luci-app-control-weburl
+svn co https://github.com/Lienol/openwrt-package/trunk/lienol/luci-app-timecontrol
+
+# Add luci-app-socat 
+svn co https://github.com/Lienol/openwrt-package/trunk/lienol/luci-app-socat
+
 # Add luci-app-ustb
 git clone https://github.com/WROIATE/luci-app-ustb
 
