@@ -147,6 +147,7 @@ jobs:
         sudo chmod +x ./$PKG_SH
         sudo su
         ./$PKG_SH
+        exit
         sudo cp /opt/openwrt/tmp/*.img ${{ env.FIRMWARE }}
 
     - name: Upload firmware directory
