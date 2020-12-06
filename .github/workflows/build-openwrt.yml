@@ -145,7 +145,8 @@ jobs:
         sudo xz -d Armbian_20.10_Aml-s9xxx_buster_5.4.77-flippy-49+o.img.xz
         cd /opt/openwrt
         sudo chmod +x ./$PKG_SH
-        sudo ./$PKG_SH
+        sudo su
+        ./$PKG_SH
         sudo cp /opt/openwrt/tmp/*.img ${{ env.FIRMWARE }}
 
     - name: Upload firmware directory

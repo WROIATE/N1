@@ -1,3 +1,5 @@
+#!/bin/bash
+
 pushd package/lean
 rm -rf luci-theme-argon
 git clone -b 18.06 https://github.com/jerrykuku/luci-theme-argon luci-theme-argon
@@ -23,13 +25,12 @@ mkdir ./package/self_add
 pushd package/self_add
 
 # Add Lienol access cnotrol
-svn co https://github.com/Lienol/openwrt-package/trunk/others/luci-app-control-timewol
-svn co https://github.com/Lienol/openwrt-package/trunk/others/luci-app-control-webrestriction
-svn co https://github.com/Lienol/openwrt-package/trunk/others/luci-app-control-weburl
-svn co https://github.com/Lienol/openwrt-package/trunk/lienol/luci-app-timecontrol
-
+svn co https://github.com/Lienol/openwrt-package/trunk/luci-app-control-timewol
+svn co https://github.com/Lienol/openwrt-package/trunk/luci-app-control-webrestriction
+svn co https://github.com/Lienol/openwrt-package/trunk/luci-app-control-weburl
+svn co https://github.com/Lienol/openwrt-package/trunk/luci-app-timecontrol
 # Add luci-app-socat 
-svn co https://github.com/Lienol/openwrt-package/trunk/lienol/luci-app-socat
+svn co https://github.com/Lienol/openwrt-package/trunk/luci-app-socat
 
 # Add luci-app-ustb
 git clone https://github.com/WROIATE/luci-app-ustb
@@ -47,6 +48,9 @@ git clone --depth=1 https://github.com/rufengsuixing/luci-app-onliner
 svn co https://github.com/Lienol/openwrt/trunk/package/diy/luci-app-adguardhome
 sed -i "/.*noresolv=1/a\\\tuci set dhcp.@dnsmasq[0].cachesize=0" luci-app-adguardhome/root/etc/init.d/AdGuardHome
 svn co https://github.com/Lienol/openwrt/trunk/package/diy/adguardhome
+
+# Add luci-app-adblockplus
+git clone https://github.com/garypang13/luci-app-adblock-plus
 
 # Add luci-app-gowebdav
 git clone --depth=1 https://github.com/project-openwrt/openwrt-gowebdav
@@ -83,5 +87,7 @@ sed -i "/uci commit system/a\uci set dhcp.@dnsmasq[0].filter_aaaa='0'" zzz-defau
 sed -i "/dhcp.@dnsmasq/a\uci commit dhcp" zzz-default-settings
 sed -i "/-j REDIRECT --to-ports 53/d" zzz-default-settings
 sed -i "/REDIRECT --to-ports 53/a\echo '# iptables -t nat -A PREROUTING -p udp --dport 53 -j REDIRECT --to-ports 53' >> /etc/firewall.user" zzz-default-settings
-sed -i "/exit 0/i\echo 'echo \"performance\" > /sys/devices/system/cpu/cpufreq/policy0/scaling_governor' >> /etc/rc.loacl" zzz-default-settings
+# sed -i "/exit 0/i\echo 'echo \"performance\" > /sys/devices/system/cpu/cpufreq/policy0/scaling_governor' >> /etc/rc.loacl" zzz-default-settings
+sed -i "/exit 0/i\uci set network.globals.ula_prefix='dead:2333:6666::/48'" zzz-default-settings
+sed -i "/exit 0/i\uci commit network" zzz-default-settings
 popd
