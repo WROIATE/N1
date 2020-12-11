@@ -50,26 +50,26 @@ sed -i "/.*noresolv=1/a\\\tuci set dhcp.@dnsmasq[0].cachesize=0" luci-app-adguar
 svn co https://github.com/Lienol/openwrt/trunk/package/diy/adguardhome
 
 # Add luci-app-adblockplus
-git clone https://github.com/garypang13/luci-app-adblock-plus
+# git clone https://github.com/garypang13/luci-app-adblock-plus
 
 # Add luci-app-gowebdav
-git clone --depth=1 https://github.com/project-openwrt/openwrt-gowebdav
+# git clone --depth=1 https://github.com/project-openwrt/openwrt-gowebdav
 
 # Add luci-app-jd-dailybonus
-git clone --depth=1 https://github.com/jerrykuku/node-request
-git clone --depth=1 https://github.com/jerrykuku/luci-app-jd-dailybonus
+# git clone --depth=1 https://github.com/jerrykuku/node-request
+# git clone --depth=1 https://github.com/jerrykuku/luci-app-jd-dailybonus
 
 # Add luci-theme-rosy
-svn co https://github.com/project-openwrt/openwrt/trunk/package/ctcgfw/luci-theme-rosy
+# svn co https://github.com/project-openwrt/openwrt/trunk/package/ctcgfw/luci-theme-rosy
 
 # Add tmate
-git clone --depth=1 https://github.com/project-openwrt/openwrt-tmate
+# git clone --depth=1 https://github.com/project-openwrt/openwrt-tmate
 
 # Add subconverter
-git clone --depth=1 https://github.com/tindy2013/openwrt-subconverter
+# git clone --depth=1 https://github.com/tindy2013/openwrt-subconverter
 
 # Add gotop
-svn co https://github.com/project-openwrt/openwrt/trunk/package/ctcgfw/gotop
+# svn co https://github.com/project-openwrt/openwrt/trunk/package/ctcgfw/gotop
 
 # Add smartdns
 svn co https://github.com/Lienol/openwrt-packages/trunk/net/smartdns
