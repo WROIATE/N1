@@ -7,8 +7,9 @@ fi
 
 # 源镜像文件
 ##########################################################################
-OPENWRT_VER="R20.10.20"
-KERNEL_VERSION="5.4.77-flippy-49+o"
+OPENWRT_VER="R20.12.12"
+KERNEL_VERSION="5.4.83-flippy-50+o"
+#KERNEL_VERSION="5.9.14-flippy-50+"
 SUBVER=$1
 # Armbian
 LNX_IMG="/opt/imgs/Armbian_20.10_Aml-s9xxx_buster_${KERNEL_VERSION}.img"
@@ -68,6 +69,11 @@ BAL_ETH_IRQ="${PWD}/files/balethirq.pl"
 # 20201026 add
 FIX_CPU_FREQ="${PWD}/files/fixcpufreq.pl"
 SYSFIXTIME_PATCH="${PWD}/files/sysfixtime.patch"
+
+# 20201128 add
+SSL_CNF_PATCH="${PWD}/files/openssl_engine.patch"
+# 20201212 add
+BAL_CONFIG="${PWD}/files/s905x/balance_irq"
 ###########################################################################
 
 # 检查环境
@@ -265,7 +271,7 @@ cd $TGT_ROOT
 [ -f $MAC_SCRIPT2 ] && cp $MAC_SCRIPT2 usr/bin/
 [ -f $MAC_SCRIPT3 ] && cp $MAC_SCRIPT3 usr/bin/
 [ -f $DAEMON_JSON ] && mkdir -p "etc/docker" && cp $DAEMON_JSON "etc/docker/daemon.json"
-[ -f $COREMARK ] && [ -f "etc/coremark.sh" ] && cp -f $COREMARK "etc/coremark.sh" && chmod 755 "etc/coremark.sh"
+[ -f $COREMARK ] && [ -f "etc/coremark.sh" ] && cp -f $COREMARK "etc/coremark.sh" && sudo chmod 755 "etc/coremark.sh"
 if [ -x usr/bin/perl ];then
 	[ -f $CPUSTAT_SCRIPT ] && cp $CPUSTAT_SCRIPT usr/bin/
 	[ -f $GETCPU_SCRIPT ] && cp $GETCPU_SCRIPT bin/
@@ -288,6 +294,7 @@ if [ -f $BAL_ETH_IRQ ];then
     cp -v $BAL_ETH_IRQ usr/sbin
     chmod 755 usr/sbin/balethirq.pl
     sed -e "/exit/i\/usr/sbin/balethirq.pl" -i etc/rc.local
+    [ -f ${BAL_CONFIG} ] && cp -v ${BAL_CONFIG} etc/config/
 fi
 
 if [ -f $FIX_CPU_FREQ ];then
@@ -296,6 +303,9 @@ if [ -f $FIX_CPU_FREQ ];then
 fi
 if [ -f $SYSFIXTIME_PATCH ];then
     patch -p1 < $SYSFIXTIME_PATCH
+fi
+if [ -f $SSL_CNF_PATCH ];then
+    patch -p1 < $SSL_CNF_PATCH
 fi
 
 [ -d ${FMW_HOME} ] && cp -a ${FMW_HOME}/* lib/firmware/
@@ -326,7 +336,10 @@ sed -e 's/root::/root:$1$NA6OM0Li$99nh752vw4oe7A.gkm2xk1:/' -i ./etc/shadow
 # for ksmbd
 [ -f ./etc/init.d/ksmbd ] && rm -f ./etc/rc.d/S98samba4 && sed -e 's/modprobe ksmbd/sleep 1 \&\& modprobe ksmbd/' -i ./etc/init.d/ksmbd
 # for samba4 enable smbv1 protocol
-[ -f ./etc/config/samba4 ] && [ -f ${SMB4_PATCH} ] && patch -p1 < ${SMB4_PATCH}
+[ -f ./etc/config/samba4 ] && \
+	sed -e 's/services/nas/g' -i ./usr/lib/lua/luci/controller/samba4.lua && \
+	[ -f ${SMB4_PATCH} ] && \
+	patch -p1 < ${SMB4_PATCH}
 # for nfs server
 if [ -f ./etc/init.d/nfsd ];then
     echo "/mnt/mmcblk1p3 *(rw,sync,no_root_squash,insecure,no_subtree_check)" > ./etc/exports
@@ -400,8 +413,11 @@ for mod in $mod_blacklist ;do
 	mv -f ./etc/modules.d/${mod} ./etc/modules.d.remove/ 2>/dev/null
 done
 [ -f ./etc/modules.d/usb-net-asix-ax88179 ] || echo "ax88179_178a" > ./etc/modules.d/usb-net-asix-ax88179
-[ -f ./etc/modules.d/usb-net-rtl8152 ] || echo "r8152" > ./etc/modules.d/usb-net-rtl8152
-[ -f ./etc/modules.d/usb-net-rtl8125 ] || echo "r8125" > ./etc/modules.d/usb-net-rtl8125
+if echo $KERNEL_VERSION | grep -E '*\+$' ;then
+	echo "r8152" > ./etc/modules.d/usb-net-rtl8152
+else
+	echo "r8152" > ./etc/modules.d/usb-net-rtl8152
+fi
 [ -f ./etc/config/shairport-sync ] && [ -f ${SND_MOD} ] && cp ${SND_MOD} ./etc/modules.d/
 echo "r8188eu" > ./etc/modules.d/rtl8188eu
 

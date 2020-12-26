@@ -381,7 +381,7 @@ while [ $i -le $max_try ]; do
 		echo "拷贝数据 ... "
 		for src in $COPY_SRC;do
 			echo -n "拷贝 $src ... "
-			(cd / && tar cf - $src) | tar xf -
+			(cd / && tar cf - $src) | tar xmf -
 			sync
 			echo "完成"
 		done

@@ -113,7 +113,7 @@ sub fix_config_file {
 				$chg_flag = 1;
 			}
 		} elsif(m/option maxfreq '(\d+)'/) {
-			if ( (not exists $freqs{$1}) or ($1 < $max_freq) ) {
+			if ( (not exists $freqs{$1}) ) {
 				$_ =~ s/$1/$max_freq/;
 				$chg_flag = 1;
 			}
