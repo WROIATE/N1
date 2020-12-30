@@ -90,4 +90,7 @@ sed -i "/REDIRECT --to-ports 53/a\echo '# iptables -t nat -A PREROUTING -p udp -
 # sed -i "/exit 0/i\echo 'echo \"performance\" > /sys/devices/system/cpu/cpufreq/policy0/scaling_governor' >> /etc/rc.loacl" zzz-default-settings
 sed -i "/exit 0/i\uci set network.globals.ula_prefix='dead:2333:6666::/48'" zzz-default-settings
 sed -i "/exit 0/i\uci commit network" zzz-default-settings
+sed -i "/exit 0/i\/etc/init.d/https-dns-proxy disable 2>/dev/null"
+sed -i "/exit 0/i\/etc/init.d/docker disable 2>/dev/null"
+sed -i "/exit 0/i\/etc/init.d/https-dns-proxy disable 2>/dev/null"
 popd
