@@ -38,6 +38,9 @@ git clone https://github.com/WROIATE/openwrt-settings
 # Add luci-app-ustb
 git clone https://github.com/WROIATE/luci-app-ustb
 
+# Add luci-app-mqos
+git clone https://github.com/WROIATE/luci-app-mqos
+
 # Add ServerChan
 git clone --depth=1 https://github.com/tty228/luci-app-serverchan
 
@@ -62,6 +65,10 @@ svn co https://github.com/kenzok8/openwrt-packages/trunk/luci-app-smartdns
 
 # Add OpenAppFilter
 git clone --depth=1 https://github.com/destan19/OpenAppFilter
+
+# Add unblockmusic
+git clone https://github.com/WROIATE/luci-app-unblockneteasemusic
+rm -rf luci-app-unblockneteasemusic/UnblockNeteaseMusic
 popd
 
 # Mod zzz-default-settings
