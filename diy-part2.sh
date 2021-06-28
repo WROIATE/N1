@@ -67,8 +67,9 @@ svn co https://github.com/kenzok8/openwrt-packages/trunk/luci-app-smartdns
 git clone --depth=1 https://github.com/destan19/OpenAppFilter
 
 # Add unblockmusic
-git clone https://github.com/WROIATE/luci-app-unblockneteasemusic
-rm -rf luci-app-unblockneteasemusic/UnblockNeteaseMusic
+# git clone https://github.com/WROIATE/luci-app-unblockneteasemusic
+# rm -rf luci-app-unblockneteasemusic/UnblockNeteaseMusic
+git clone https://github.com/immortalwrt/luci-app-unblockneteasemusic
 popd
 
 # Mod zzz-default-settings
