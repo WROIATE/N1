@@ -78,3 +78,8 @@ sed -i "/-j REDIRECT --to-ports 53/d" zzz-default-settings
 sed -i "/REDIRECT --to-ports 53/a\echo '# iptables -t nat -A PREROUTING -p udp --dport 53 -j REDIRECT --to-ports 53' >> /etc/firewall.user" zzz-default-settings
 # sed -i "/exit 0/i\echo 'echo \"performance\" > /sys/devices/system/cpu/cpufreq/policy0/scaling_governor' >> /etc/rc.loacl" zzz-default-settings
 popd
+
+# 修改限制时间防止passwall在nginx下无法使用 uwsgi ini file
+pushd feeds/packages/net/uwsgi/files-luci-support
+sed -i "s/limit-as = 1000/limit-as = 100000/g" luci-webui.ini
+popd
