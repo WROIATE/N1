@@ -29,6 +29,10 @@ svn co https://github.com/Lienol/openwrt-package/trunk/luci-app-control-timewol
 svn co https://github.com/Lienol/openwrt-package/trunk/luci-app-control-webrestriction
 svn co https://github.com/Lienol/openwrt-package/trunk/luci-app-control-weburl
 svn co https://github.com/Lienol/openwrt-package/trunk/luci-app-timecontrol
+
+# Add ssr plus
+https://github.com/fw876/helloworld.git
+
 # Add luci-app-socat 
 svn co https://github.com/Lienol/openwrt-package/trunk/luci-app-socat
 
